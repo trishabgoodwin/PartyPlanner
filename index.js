@@ -1,13 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // API base URL for party (event) data
+    
     const baseUrl = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/2501-FTB-ET-WEB-PT/events';
    
     const partyListDiv = document.getElementById('party-list');
     const partyForm = document.getElementById('party-form');
 
     const state = {
-      allParties: [],
-
+      events: [],
     }
   
     // Fetch the parties from the API and render them
@@ -16,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(`${baseUrl}`);
         const parties = await response.json();
         console.log(parties)
-        renderParties(parties);
+        renderParties(parties.data);
       } catch (error) {
         console.error('Error fetching parties:', error);
       }
@@ -52,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add a new party via a POST request to the API
     async function addParty(newParty) {
       try {
-        await fetch(baseUrl, {
+        await fetch(`${baseUrl}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newParty)
@@ -94,4 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
   
     // Initial fetch of party data when the page loads
     getParties();
-  });
+  };
+  async function init(){
+    const parties= await getParties()
+    renderParties(parties.data)
+  }
+
+  init()
